@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import java.util.*
 
-object JWTUtil {
+object JwtUtil {
 
     private const val ISSUER = "SotenShop"
     private const val SUBJECT = "Auth"

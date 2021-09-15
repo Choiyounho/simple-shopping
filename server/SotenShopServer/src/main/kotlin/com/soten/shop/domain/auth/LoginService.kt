@@ -31,8 +31,8 @@ class LoginService @Autowired constructor(
 
     private fun responseWithTokens(user: User) = user.id?.let { userId ->
         LoginResponse(
-            JWTUtil.createToken(user.email),
-            JWTUtil.createRefreshToken(user.email),
+            JwtUtil.createToken(user.email),
+            JwtUtil.createRefreshToken(user.email),
             user.name,
             userId
         )
