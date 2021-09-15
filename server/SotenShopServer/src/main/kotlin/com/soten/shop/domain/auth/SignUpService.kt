@@ -12,16 +12,16 @@ class SignUpService @Autowired constructor(
 	private val userRepository: UserRepository
 ) {
 
-	fun signup(signupRequest: SignupRequest) {
-		validateRequest(signupRequest)
-		checkDuplicates(signupRequest.email)
-		registerUser(signupRequest)
+	fun signup(signUpRequest: SignUpRequest) {
+		validateRequest(signUpRequest)
+		checkDuplicates(signUpRequest.email)
+		registerUser(signUpRequest)
 	}
 
-	private fun validateRequest(signupRequest: SignupRequest) {
-		validateEmail(signupRequest.email)
-		validateName(signupRequest.name)
-		validatePassword(signupRequest.password)
+	private fun validateRequest(signUpRequest: SignUpRequest) {
+		validateEmail(signUpRequest.email)
+		validateName(signUpRequest.name)
+		validatePassword(signUpRequest.password)
 	}
 
 	private fun validateEmail(email: String) {
@@ -50,8 +50,8 @@ class SignUpService @Autowired constructor(
 			throw ShopException("이미 사용 중인 이메일입니다.")
 		}
 
-	private fun registerUser(signupRequest: SignupRequest) =
-		with(signupRequest) {
+	private fun registerUser(signUpRequest: SignUpRequest) =
+		with(signUpRequest) {
 			val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
 			val user = User(email, hashedPassword, name)
 			userRepository.save(user)

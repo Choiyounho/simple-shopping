@@ -1,8 +1,8 @@
 package com.soten.shop.controller
 
-import com.soten.shop.domain.auth.SignUpService
-import com.soten.shop.domain.auth.SignUpRequest
 import com.soten.shop.common.ApiResponse
+import com.soten.shop.domain.auth.LoginRequest
+import com.soten.shop.domain.auth.LoginService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/soten")
-class UserApiController @Autowired constructor(
-    private val signupService: SignUpService
+class LoginApiController @Autowired constructor(
+    private val loginService: LoginService
 ) {
 
-    @PostMapping("/users")
-    fun signup(@RequestBody signUpRequest: SignUpRequest) =
-        ApiResponse.ok(signupService.signup(signUpRequest))
+    @PostMapping("/login")
+    fun signIn(@RequestBody loginRequest: LoginRequest) =
+        ApiResponse.ok(loginService.signIn(loginRequest))
 
 }

@@ -1,7 +1,6 @@
 package com.soten.shop.domain.auth
 
-data class SignupRequest(
+data class LoginRequest(
     val email: String,
-    val name: String,
     val password: String
 )
