@@ -25,4 +25,13 @@ class Product(
 
     val userId: Long
 
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun updateInformation(name: String, description: String, price: Int, status: ProductStatus) {
+        this.name = name
+        this.description = description
+        this.price = price
+        this.status = status
+    }
+
+}

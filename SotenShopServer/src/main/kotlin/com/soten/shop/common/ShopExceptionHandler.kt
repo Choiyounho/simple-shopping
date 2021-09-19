@@ -12,7 +12,7 @@ class ShopExceptionHandler {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @ExceptionHandler(ShopException::class)
-    fun handleParayoException(e: ShopException): ApiResponse {
+    fun handleSotenException(e: ShopException): ApiResponse {
         logger.error("API error", e)
         return ApiResponse.error(e.message)
     }
