@@ -1,6 +1,6 @@
 package com.soten.shop.domain.jpa
 
-import java.util.*
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @MappedSuperclass
@@ -10,18 +10,18 @@ abstract class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	open var id: Long? = null
 
-	open var createdAt: Date? = null
-	open var updatedAt: Date? = null
+	open var createdAt: LocalDateTime? = null
+	open var updatedAt: LocalDateTime? = null
 
 	@PrePersist
 	fun prePersist() {
-		createdAt = Date()
-		updatedAt = Date()
+		createdAt = LocalDateTime.now()
+		updatedAt = LocalDateTime.now()
 	}
 
 	@PreUpdate
 	fun preUpdate() {
-		updatedAt = Date()
+		updatedAt = LocalDateTime.now()
 	}
 
 }
