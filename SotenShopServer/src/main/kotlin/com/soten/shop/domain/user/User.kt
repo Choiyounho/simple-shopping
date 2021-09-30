@@ -1,31 +1,12 @@
 package com.soten.shop.domain.user
 
-import java.util.*
-import javax.persistence.*
+import com.soten.shop.domain.jpa.BaseEntity
+import javax.persistence.Entity
 
 @Entity(name = "user")
 class User(
 	var email: String,
 	var password: String,
-	var name: String
-) {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	var id: Long? = null
-
-	var createdAt: Date? = null
-	var updatedAt: Date? = null
-
-	@PrePersist
-	fun prePersist() {
-		createdAt = Date()
-		updatedAt = Date()
-	}
-
-	@PreUpdate
-	fun preUpdate() {
-		updatedAt = Date()
-	}
-
-}
+	var name: String,
+	var cardName: String? = null
+) : BaseEntity()
