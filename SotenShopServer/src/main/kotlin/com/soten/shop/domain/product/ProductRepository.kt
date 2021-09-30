@@ -8,7 +8,7 @@ interface ProductRepository : JpaRepository<Product, Long> {
 
 	override fun findById(id: Long?): Optional<Product>
 
-	fun findAllByOrderByIdDesc(): List<Product>
+	fun findAllByOrderByIdDesc(pageable: Pageable): List<Product>
 
 	fun findByCategoryIdAndIdGreaterThanOrderByIdDesc(
 		categoryId: Int?, id: Long, pageable: Pageable

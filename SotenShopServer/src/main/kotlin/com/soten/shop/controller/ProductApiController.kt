@@ -4,36 +4,31 @@ import com.soten.shop.common.ApiResponse
 import com.soten.shop.common.ShopException
 import com.soten.shop.domain.product.Product
 import com.soten.shop.domain.product.ProductService
-import com.soten.shop.domain.product.registration.ProductImageService
 import com.soten.shop.domain.product.registration.ProductRegistrationRequest
 import com.soten.shop.domain.product.registration.ProductRegistrationService
 import com.soten.shop.domain.product.toProductListItemResponse
 import com.soten.shop.domain.product.toProductResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("soten")
 class ProductApiController @Autowired constructor(
-	private val productImageService: ProductImageService,
 	private val productRegistration: ProductRegistrationService,
 	private val productService: ProductService
 ) {
 
-	@GetMapping("/productss")
-	fun getAll() = productService.getAllProduct().let { ApiResponse.ok(it) }
+	@GetMapping("/products/recommend")
+	fun getAll(
+		@RequestParam(required = false) limit: Int?
+	) = productService.getAllProduct(limit ?: 10).let { ApiResponse.ok(it) }
 
 	@GetMapping("/product/category/{categoryId}")
 	fun getAllCategoryId(@PathVariable categoryId: Int) =
 		productService.getAllCategoryId(categoryId).let { ApiResponse.ok(it) }
 
-	@PostMapping("/product_images")
-	fun uploadImage(image: MultipartFile) =
-		ApiResponse.ok(productImageService.uploadImage(image))
-
-	@PostMapping("/products")
+	@PostMapping("/register/products/")
 	fun register(
 		@RequestBody request: ProductRegistrationRequest
 	) = ApiResponse.ok(productRegistration.register(request))

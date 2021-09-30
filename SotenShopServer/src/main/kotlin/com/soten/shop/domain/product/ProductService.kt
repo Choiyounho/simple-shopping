@@ -55,8 +55,11 @@ class ProductService @Autowired constructor(
 		return product.get()
 	}
 
-	fun getAllProduct(): List<Product> {
-		return productRepository.findAllByOrderByIdDesc()
+	fun getAllProduct(
+		limit: Int
+	): List<Product> {
+		val pageable = PageRequest.of(0, limit)
+		return productRepository.findAllByOrderByIdDesc(pageable)
 	}
 
 	fun getAllCategoryId(categoryId: Int): List<Product> {
