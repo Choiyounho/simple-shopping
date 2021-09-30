@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class LoginService @Autowired constructor(
+class SignInService @Autowired constructor(
     private val userRepository: UserRepository
 ) {
 

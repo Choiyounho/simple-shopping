@@ -3,7 +3,7 @@ package com.soten.shop.controller
 import com.soten.shop.common.ApiResponse
 import com.soten.shop.domain.auth.JwtUtil
 import com.soten.shop.domain.auth.LoginRequest
-import com.soten.shop.domain.auth.LoginService
+import com.soten.shop.domain.auth.SignInService
 import com.soten.shop.domain.auth.UserContextHolder
 import com.soten.shop.domain.interceptor.TokenValidationInterceptor
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,13 +13,13 @@ import java.lang.IllegalArgumentException
 @RestController
 @RequestMapping("/soten")
 class LoginApiController @Autowired constructor(
-    private val loginService: LoginService,
+    private val signInService: SignInService,
     private val userContextHolder: UserContextHolder
 ) {
 
-    @PostMapping("/login")
+    @PostMapping("/sign-in")
     fun signIn(@RequestBody loginRequest: LoginRequest) =
-        ApiResponse.ok(loginService.signIn(loginRequest))
+        ApiResponse.ok(signInService.signIn(loginRequest))
 
     @PostMapping("/refresh_token")
     fun refreshToken(
