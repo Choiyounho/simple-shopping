@@ -1,7 +1,10 @@
 package com.soten.shop.domain.product
 
 import com.soten.shop.domain.jpa.BaseEntity
+import org.hibernate.validator.constraints.Length
+import java.time.LocalDateTime
 import javax.persistence.*
+import javax.validation.constraints.Size
 
 @Entity(name = "product")
 class Product(
@@ -16,14 +19,15 @@ class Product(
 
     var categoryId: Int,
 
+    override var updatedAt: LocalDateTime?,
+
     @Enumerated(EnumType.STRING)
     var status: ProductStatus,
 
-    @OneToMany
-    @JoinColumn(name = "productId")
-    var images: MutableList<ProductImage>,
+    @Length(max = 15500)
+    var images: String,
 
-    val userId: Long
+    val userId: Int
 
 ) : BaseEntity() {
 
@@ -32,6 +36,7 @@ class Product(
         this.description = description
         this.price = price
         this.status = status
+        this.updatedAt = LocalDateTime.now()
     }
 
 }

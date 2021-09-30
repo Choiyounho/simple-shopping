@@ -6,8 +6,8 @@ data class ProductListItemResponse(
     val description: String,
     val price: Int,
     val status: String,
-    val sellerId: Long,
-    val imagePaths: List<String>
+    val sellerId: Int,
+    val imagePaths: String
 )
 
 fun Product.toProductListItemResponse() = id?.let {
@@ -18,14 +18,7 @@ fun Product.toProductListItemResponse() = id?.let {
         price,
         status.name,
         userId,
-        images.map { it.toThumbs() }
+        images
     )
 }
 
-fun ProductImage.toThumbs(): String {
-    val ext = path.takeLastWhile { it != '.' }
-    val fileName = path.takeWhile { it != '.' }
-    val thumbnailPath = "$fileName-thumb.$ext"
-
-    return if (ext == "jpg") thumbnailPath else "$thumbnailPath.jpg"
-}
