@@ -1,9 +1,15 @@
-package com.soten.shop.domain.product
+package com.soten.shop.domain.product.service
 
+import com.soten.shop.common.ShopException
+import com.soten.shop.domain.product.Product
+import com.soten.shop.domain.product.ProductRegistrationRequest
+import com.soten.shop.domain.product.ProductRepository
+import com.soten.shop.domain.product.ProductStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
@@ -11,11 +17,11 @@ class ProductService @Autowired constructor(
 	private val productRepository: ProductRepository
 ) {
 
-	fun get(id: Long) = productRepository.findByIdOrNull(id)
+	fun get(id: Int) = productRepository.findByIdOrNull(id)
 
 	fun search(
 		categoryId: Int?,
-		productId: Long,
+		productId: Int,
 		direction: String,
 		keyword: String?,
 		limit: Int
@@ -49,7 +55,17 @@ class ProductService @Autowired constructor(
 	}
 
 	@Transactional
-	fun updateProduct(id: Long, name: String, description: String, price: Int, status: ProductStatus): Product {
+	fun register(request: ProductRegistrationRequest): Product {
+		return request.toProduct().run(::save)
+			?: throw ShopException(
+				"상품 등록에 필요한 사용자 정보가 존재하지 않습니다."
+			)
+	}
+
+	private fun save(product: Product) = productRepository.save(product)
+
+	@Transactional
+	fun updateProduct(id: Int, name: String, description: String, price: Int, status: ProductStatus): Product {
 		val product = productRepository.findById(id)
 		product.get().updateInformation(name, description, price, status)
 		return product.get()
@@ -80,3 +96,14 @@ class ProductService @Autowired constructor(
 	}
 
 }
+
+private fun ProductRegistrationRequest.toProduct() = Product(
+	name,
+	description,
+	price,
+	categoryId,
+	LocalDateTime.now(),
+	ProductStatus.SELLABLE,
+	userId,
+	images
+)

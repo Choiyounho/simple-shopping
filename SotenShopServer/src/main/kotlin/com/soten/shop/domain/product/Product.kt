@@ -24,10 +24,18 @@ class Product(
     @Enumerated(EnumType.STRING)
     var status: ProductStatus,
 
-    @Length(max = 15500)
-    var images: String,
+//    @Length(max = 15500)
+//    var images: String,
 
-    val userId: Int
+    val userId: Int,
+
+    @ElementCollection
+    @CollectionTable(
+        name = "product_images",
+        joinColumns = [JoinColumn(name = "image_id")]
+    )
+    @Column(name = "images")
+    var images: List<String>
 
 ) : BaseEntity() {
 

@@ -3,13 +3,13 @@ package com.soten.shop.domain.product
 import com.soten.shop.common.ShopException
 
 data class ProductResponse(
-    val id: Long,
+    val id: Int,
     val name: String,
     val description: String,
     val price: Int,
     val status: String,
     val sellerId: Int,
-    val imagePaths: String
+    val images: List<String>
 )
 
 fun Product.toProductResponse() = id?.let { it ->

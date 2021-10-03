@@ -12,7 +12,7 @@ class UserContextHolder @Autowired constructor(
         UserHolder()
     }
 
-    val id: Long? get() = userHolder.get().id
+    val id: Int? get() = userHolder.get().id
     val name: String? get() = userHolder.get().name
     val email: String? get() = userHolder.get().email
 
@@ -30,7 +30,7 @@ class UserContextHolder @Autowired constructor(
     }
 
     class UserHolder {
-        var id: Long? = null
+        var id: Int? = null
         var email: String? = null
         var name: String? = null
     }

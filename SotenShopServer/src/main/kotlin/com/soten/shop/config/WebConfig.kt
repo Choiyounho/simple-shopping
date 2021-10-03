@@ -21,7 +21,7 @@ class WebConfig @Autowired constructor(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(tokenValidationInterceptor)
-            .addPathPatterns("/soten/**")
+            .addPathPatterns("/soten/temp/**")
     }
 
 }

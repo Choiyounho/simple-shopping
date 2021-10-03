@@ -3,9 +3,8 @@ package com.soten.shop.controller
 import com.soten.shop.common.ApiResponse
 import com.soten.shop.common.ShopException
 import com.soten.shop.domain.product.Product
-import com.soten.shop.domain.product.ProductService
-import com.soten.shop.domain.product.registration.ProductRegistrationRequest
-import com.soten.shop.domain.product.registration.ProductRegistrationService
+import com.soten.shop.domain.product.ProductRegistrationRequest
+import com.soten.shop.domain.product.service.ProductService
 import com.soten.shop.domain.product.toProductListItemResponse
 import com.soten.shop.domain.product.toProductResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +14,6 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("soten")
 class ProductApiController @Autowired constructor(
-	private val productRegistration: ProductRegistrationService,
 	private val productService: ProductService
 ) {
 
@@ -31,11 +29,11 @@ class ProductApiController @Autowired constructor(
 	@PostMapping("/register/products/")
 	fun register(
 		@RequestBody request: ProductRegistrationRequest
-	) = ApiResponse.ok(productRegistration.register(request))
+	) = ApiResponse.ok(productService.register(request))
 
 	@GetMapping("/products")
 	fun search(
-		@RequestParam productId: Long,
+		@RequestParam productId: Int,
 		@RequestParam(required = false) categoryId: Int?,
 		@RequestParam direction: String,
 		@RequestParam(required = false) keyword: String?,
@@ -46,13 +44,13 @@ class ProductApiController @Autowired constructor(
 		.let { ApiResponse.ok(it) }
 
 	@GetMapping("/products/{id}")
-	fun get(@PathVariable id: Long) = productService.get(id)?.let {
+	fun get(@PathVariable id: Int) = productService.get(id)?.let {
 		ApiResponse.ok(it.toProductResponse())
 	} ?: throw ShopException("상품 정보를 찾을 수 없습니다.")
 
 	@PatchMapping("/products/{id}")
 	fun update(
-		@PathVariable id: Long,
+		@PathVariable id: Int,
 		@Valid @RequestBody product: Product
 	) = productService.updateProduct(id, product.name, product.description, product.price, product.status).let {
 		ApiResponse.ok(it.toProductResponse())
