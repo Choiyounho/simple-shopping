@@ -4,20 +4,22 @@ import com.soten.shop.common.ShopException
 import com.soten.shop.product.domain.Product
 import com.soten.shop.product.domain.ProductRepository
 import com.soten.shop.product.domain.ProductStatus
+import com.soten.shop.product.dto.ProductRegistrationRequest
 import com.soten.shop.product.dto.ProductSearchCondition
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 @Transactional(readOnly = true)
-class ProductService(
-    private val productRepository: ProductRepository
-) {
+class ProductService(private val productRepository: ProductRepository) {
 
-    fun get(id: Long): Product? {
-        return productRepository.findByIdOrNull(id)
+    fun get(id: Int): Product {
+        return productRepository.findById(id)
     }
 
     @Transactional
@@ -44,6 +46,16 @@ class ProductService(
         }
     }
 
+    fun getAllProduct(limit: Int): List<Product> {
+        val pageable = PageRequest.of(0, limit)
+        return productRepository.findAllByOrderByIdDesc(pageable)
+    }
+
+    fun getAllCategoryId(categoryId: Int, limit: Int, pageNumber: Int): Page<Product> {
+        val pageable = PageRequest.of(pageNumber, limit)
+        return productRepository.findAllByCategoryIdOrderByIdDesc(categoryId, pageable)
+    }
+
     @Transactional
     fun updateProduct(id: Long, name: String, description: String, price: Int, status: ProductStatus): Product {
         val product = productRepository.findById(id).orElseThrow { ShopException("not found product $id") }
@@ -51,14 +63,15 @@ class ProductService(
         return product
     }
 
-    fun getAllProduct(limit: Int): List<Product> {
-        val pageable = PageRequest.of(0, limit)
-        return productRepository.findAllByOrderByIdDesc(pageable)
+    @Transactional
+    fun register(request: ProductRegistrationRequest): Product {
+        return request.toProduct().run(::save)
+            ?: throw ShopException(
+                "상품 등록에 필요한 사용자 정보가 존재하지 않습니다."
+            )
     }
 
-    fun getAllCategoryId(categoryId: Int): List<Product> {
-        return productRepository.findAllByCategoryIdOrderByIdDesc(categoryId)
-    }
+    private fun save(product: Product) = productRepository.save(product)
 
     companion object {
         val NEXT_IN_SEARCH = ProductSearchCondition(false, "next", true)
@@ -67,3 +80,14 @@ class ProductService(
         val PREV_IN_CATEGORY = ProductSearchCondition(true, "prev")
     }
 }
+
+private fun ProductRegistrationRequest.toProduct() = Product(
+    name,
+    description,
+    price,
+    categoryId,
+    LocalDateTime.now(),
+    ProductStatus.SELLABLE,
+    userId,
+    images
+)

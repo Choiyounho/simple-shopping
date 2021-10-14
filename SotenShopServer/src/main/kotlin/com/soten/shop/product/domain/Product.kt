@@ -1,7 +1,6 @@
 package com.soten.shop.product.domain
 
 import com.soten.shop.common.BaseEntity
-import org.hibernate.validator.constraints.Length
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -23,9 +22,6 @@ class Product(
     @Enumerated(EnumType.STRING)
     var status: ProductStatus,
 
-//    @Length(max = 15500)
-//    var images: String,
-
     val userId: Int,
 
     @ElementCollection
@@ -45,4 +41,5 @@ class Product(
         this.status = status
         this.updatedAt = LocalDateTime.now()
     }
+
 }
