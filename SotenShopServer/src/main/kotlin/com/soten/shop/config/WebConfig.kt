@@ -1,6 +1,6 @@
 package com.soten.shop.config
 
-import com.soten.shop.domain.interceptor.TokenValidationInterceptor
+import com.soten.shop.auth.interceptor.TokenValidationInterceptor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
@@ -12,9 +12,7 @@ class WebConfig @Autowired constructor(
     private val tokenValidationInterceptor: TokenValidationInterceptor
 ) : WebMvcConfigurer {
 
-    override fun addResourceHandlers(
-        registry: ResourceHandlerRegistry
-    ) {
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("/images/**")
             .addResourceLocations("file:///soten/images/")
     }
@@ -23,5 +21,4 @@ class WebConfig @Autowired constructor(
         registry.addInterceptor(tokenValidationInterceptor)
             .addPathPatterns("/soten/temp/**")
     }
-
 }
