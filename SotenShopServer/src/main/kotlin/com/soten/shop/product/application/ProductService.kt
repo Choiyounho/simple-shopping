@@ -8,8 +8,6 @@ import com.soten.shop.product.dto.ProductRegistrationRequest
 import com.soten.shop.product.dto.ProductSearchCondition
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -22,28 +20,9 @@ class ProductService(private val productRepository: ProductRepository) {
         return productRepository.findById(id)
     }
 
-    @Transactional
-    fun search(categoryId: Int?, productId: Long, direction: String, keyword: String?, limit: Int): List<Product> {
+    fun searchProducts(keyword: String, limit: Int, pageNumber: Int): Page<Product> {
         val pageable = PageRequest.of(0, limit)
-        val isCategoryId = categoryId != null
-        val isKeyword = keyword != null
-        val condition = ProductSearchCondition(isCategoryId, direction, isKeyword)
-
-        return when (condition) {
-            NEXT_IN_SEARCH -> productRepository.findByIdLessThanAndNameLikeOrderByIdDesc(
-                productId, "%$keyword%", pageable
-            )
-            PREV_IN_SEARCH -> productRepository.findByIdGreaterThanAndNameLikeOrderByIdDesc(
-                productId, "%$keyword%", pageable
-            )
-            NEXT_IN_CATEGORY -> productRepository.findByCategoryIdAndIdLessThanOrderByIdDesc(
-                categoryId, productId, pageable
-            )
-            PREV_IN_CATEGORY -> productRepository.findByCategoryIdAndIdGreaterThanOrderByIdDesc(
-                categoryId, productId, pageable
-            )
-            else -> throw IllegalArgumentException("상품 검색 조건 오류")
-        }
+        return productRepository.findByNameContaining(keyword, pageable)
     }
 
     fun getAllProduct(limit: Int): List<Product> {
@@ -72,13 +51,6 @@ class ProductService(private val productRepository: ProductRepository) {
     }
 
     private fun save(product: Product) = productRepository.save(product)
-
-    companion object {
-        val NEXT_IN_SEARCH = ProductSearchCondition(false, "next", true)
-        val PREV_IN_SEARCH = ProductSearchCondition(false, "prev", true)
-        val NEXT_IN_CATEGORY = ProductSearchCondition(true, "next")
-        val PREV_IN_CATEGORY = ProductSearchCondition(true, "prev")
-    }
 }
 
 private fun ProductRegistrationRequest.toProduct() = Product(

@@ -20,9 +20,11 @@ class ProductApiController(private val productService: ProductService) {
 	}
 
 	@GetMapping("/product/category/{categoryId}")
-	fun getAllCategoryId(@PathVariable categoryId: Int,
-						 @RequestParam pageNumber: Int,
-						 @RequestParam(required = false) limit: Int?): Page<Product> {
+	fun getAllCategoryId(
+		@PathVariable categoryId: Int,
+		@RequestParam pageNumber: Int,
+		@RequestParam(required = false) limit: Int?
+	): Page<Product> {
 		return productService.getAllCategoryId(categoryId, limit ?: 5, pageNumber)
 	}
 
@@ -36,6 +38,15 @@ class ProductApiController(private val productService: ProductService) {
 	fun get(@PathVariable id: Int): ApiResponse {
 		val product = productService.get(id)
 		return ApiResponse.ok(product)
+	}
+
+	@GetMapping("/products/search")
+	fun searchKeyword(
+		@RequestParam(value = "keyword") keyword: String,
+		@RequestParam pageNumber: Int,
+		@RequestParam(required = false) limit: Int?
+	): Page<Product> {
+		return productService.searchProducts(keyword, limit ?: 5, pageNumber)
 	}
 
 }
