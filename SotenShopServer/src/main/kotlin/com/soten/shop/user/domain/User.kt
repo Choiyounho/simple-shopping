@@ -8,7 +8,7 @@ class User(
 	val email: String,
 	val password: String,
 	val name: String,
-	var cardName: String? = null
+	var cardName: String = ""
 ) : BaseEntity() {
 
 	fun updateCardName(cardName: String) {

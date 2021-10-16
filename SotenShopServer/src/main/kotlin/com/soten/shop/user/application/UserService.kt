@@ -15,7 +15,7 @@ class UserService(
 	fun updateCardName(cardNameUpdateRequest: CardNameUpdateRequest): User {
 		val userId = cardNameUpdateRequest.userId
 		val user = userRepository.findById(userId)
-		user!!.updateCardName(cardNameUpdateRequest.cardName)
+		user.updateCardName(cardNameUpdateRequest.cardName)
 		return user
 	}
 
